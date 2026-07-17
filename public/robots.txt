@@ -1,0 +1,20 @@
+﻿User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /api/
+Disallow: /auth/
+Disallow: /auth/callback
+
+Sitemap: https://www.gabineteapp.com.br/sitemap.xml
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: *
+Crawl-delay: 1
