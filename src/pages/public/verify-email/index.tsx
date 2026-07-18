@@ -1,4 +1,4 @@
-import Logo from '@/assets/logo-new.png'
+import Logo from '@/assets/aprovai.svg'
 import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { VerifyEmailContent } from './components/verify-email-content'
 

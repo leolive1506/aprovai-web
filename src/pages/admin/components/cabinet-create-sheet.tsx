@@ -18,9 +18,9 @@ import {
 } from "@/components/ui/sheet"
 import { getApiErrorMessage } from "@/lib/utils"
 import {
-  createCabinetWithOwnerSchema,
-  type CreateCabinetWithOwnerFormData,
-} from "@/validation-schemas/cabinet-wizard"
+  createCompanyWithOwnerSchema,
+  type CreateCompanyWithOwnerFormData,
+} from "@/schemas/company"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, PlusIcon } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
@@ -47,8 +47,8 @@ export function CabinetsForm({ sizeTrigger }: CabinetsFormProps) {
   const { mutateAsync: createCabinetWithOwner, isPending } =
     useAdminCreateCabinetWithOwner()
 
-  const form = useForm<CreateCabinetWithOwnerFormData>({
-    resolver: zodResolver(createCabinetWithOwnerSchema),
+  const form = useForm<CreateCompanyWithOwnerFormData>({
+    resolver: zodResolver(createCompanyWithOwnerSchema),
     defaultValues: {
       ownerUserId: "",
       name: "",

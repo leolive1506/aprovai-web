@@ -11,22 +11,22 @@ export function buildOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Gabinete App",
+    name: "Aprovai",
     url: SITE_CONFIG.domain,
     logo: `${SITE_CONFIG.domain}/logo.svg`,
     description:
-      "Software de gestão de demandas para gabinetes políticos. Organize solicitações de cidadãos, acompanhe andamento e prove resultados.",
+      "Plataforma SaaS de aprovação de compras. Centralize aprovações, automatize fluxos e tenha controle total do orçamento empresarial.",
     foundingDate: "2024",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer support",
       availableLanguage: "Portuguese",
-      email: "suporte@gabineteapp.com.br",
+      email: "suporte@aprovai.com.br",
     },
     sameAs: [
-      "https://twitter.com/gabineteapp",
-      "https://instagram.com/gabineteapp",
-      "https://linkedin.com/company/gabineteapp",
+      "https://twitter.com/aprovai",
+      "https://instagram.com/aprovai",
+      "https://linkedin.com/company/aprovai",
     ],
   }
 }
@@ -35,17 +35,17 @@ export function buildSoftwareApplicationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Gabinete App",
+    name: "Aprovai",
     operatingSystem: "Web",
     applicationCategory: "BusinessApplication",
     url: SITE_CONFIG.domain,
     description:
-      "Software de gestão de demandas para gabinetes políticos. Organize solicitações de cidadãos, acompanhe andamento e comprove resultados com analytics em tempo real.",
+      "Plataforma SaaS de aprovação de compras. Centralize aprovações, automatize fluxos e tenha controle total do orçamento empresarial com analytics em tempo real.",
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "BRL",
-      description: "Teste grátis, sem cartão de crédito.",
+      description: "Teste grátis 14 dias, sem cartão de crédito.",
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -55,13 +55,13 @@ export function buildSoftwareApplicationSchema() {
       worstRating: "1",
     },
     featureList: [
-      "Gestão de demandas",
+      "Approval workflow automático",
+      "Controle de orçamento",
       "Analytics e KPIs",
-      "Mapa de calor geolocalizado",
       "Relatórios em tempo real",
-      "Notificações automáticas",
-      "Gestão de equipe",
-      "Portal para cidadãos",
+      "Notificações multi-canal",
+      "Gestão de usuários com RBAC",
+      "Integrações (Slack, Google)",
     ],
   }
 }
@@ -90,14 +90,14 @@ export function buildWebSiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Gabinete App",
+    name: "Aprovai",
     url: SITE_CONFIG.domain,
     inLanguage: "pt-BR",
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${SITE_CONFIG.domain}/feed?q={search_term_string}`,
+        urlTemplate: `${SITE_CONFIG.domain}/demands?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },

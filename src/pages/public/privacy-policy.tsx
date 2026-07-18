@@ -20,7 +20,7 @@ export function PrivacyPolicyPage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">1. Introdução</h2>
               <p>
-                Esta Política de Privacidade descreve como o Gabinete coleta, usa e protege suas informações 
+                Esta Política de Privacidade descreve como o Aprovai coleta, usa e protege suas informações
                 em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
               </p>
             </section>
@@ -28,12 +28,13 @@ export function PrivacyPolicyPage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">2. Dados Coletados</h2>
               <p>
-                Coletamos apenas os dados necessários para a prestação do serviço, incluindo:
+                Coletamos apenas os dados necessários para a prestação do serviço SaaS de aprovação de compras:
               </p>
               <ul className="list-disc pl-5 mt-3 space-y-2">
-                <li><strong>Dados de Identificação:</strong> Nome, e-mail e telefone.</li>
-                <li><strong>Dados de Localização:</strong> Endereço e coordenadas geográficas vinculadas às demandas registradas.</li>
-                <li><strong>Dados de Acesso:</strong> Endereço IP, tipo de navegador e registros de atividade.</li>
+                <li><strong>Dados de Identificação:</strong> Nome, e-mail, telefone e cargo/departamento.</li>
+                <li><strong>Dados Empresariais:</strong> Informações da empresa, departamentos e estrutura organizacional.</li>
+                <li><strong>Dados de Acesso:</strong> Endereço IP, tipo de navegador, registros de atividade e logs de aprovação.</li>
+                <li><strong>Dados de Pedidos:</strong> Informações sobre pedidos de compra, valores, fornecedores e histórico de aprovações.</li>
               </ul>
             </section>
 
@@ -41,19 +42,20 @@ export function PrivacyPolicyPage() {
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">3. Finalidade do Tratamento</h2>
               <p>Seus dados são utilizados para:</p>
               <ul className="list-disc pl-5 mt-3 space-y-2">
-                <li>Identificar a autoria de demandas públicas;</li>
-                <li>Permitir que gabinetes entrem em contato para atualizações sobre sua solicitação;</li>
-                <li>Gerar métricas agregadas e anônimas sobre problemas urbanos;</li>
-                <li>Garantir a segurança da plataforma e prevenir fraudes.</li>
+                <li>Identificar usuários e autenticar acesso à plataforma;</li>
+                <li>Processar e rastrear pedidos de compra e seus fluxos de aprovação;</li>
+                <li>Enviar notificações sobre pendências e aprovações;</li>
+                <li>Gerar relatórios e análises de orçamento para sua empresa;</li>
+                <li>Garantir a segurança da plataforma e prevenir fraudes e acessos não autorizados.</li>
               </ul>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">4. Compartilhamento de Dados</h2>
               <p>
-                Ao registrar uma demanda em um gabinete específico, seus dados de contato e a descrição da demanda 
-                serão compartilhados com os membros autorizados daquele gabinete para processamento. 
-                Não vendemos ou alugamos seus dados pessoais para terceiros.
+                Seus dados são compartilhados exclusivamente com membros autorizados de sua empresa (aprovadores, gestores,
+                financeiro) conforme as permissões de acesso que você define. Não vendemos ou alugamos seus dados pessoais para terceiros.
+                Integrações externas (Slack, Google Workspace) ocorrem apenas com seu consentimento explícito.
               </p>
             </section>
 
@@ -62,33 +64,35 @@ export function PrivacyPolicyPage() {
               <p>De acordo com a LGPD, você tem direito a:</p>
               <ul className="list-disc pl-5 mt-3 space-y-2">
                 <li>Confirmar a existência de tratamento de seus dados;</li>
-                <li>Acessar seus dados pessoais;</li>
+                <li>Acessar seus dados pessoais e histórico de atividades;</li>
                 <li>Corrigir dados incompletos ou inexatos;</li>
-                <li>Solicitar a anonimização ou eliminação de dados desnecessários;</li>
-                <li>Revogar o consentimento a qualquer momento.</li>
+                <li>Solicitar a exclusão de dados quando não for mais necessária a retenção;</li>
+                <li>Revogar consentimentos a qualquer momento;</li>
+                <li>Solicitar a portabilidade de seus dados.</li>
               </ul>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">6. Segurança</h2>
               <p>
-                Implementamos medidas técnicas e organizativas para proteger seus dados contra acessos não autorizados 
-                e situações acidentais ou ilícitas de destruição, perda, alteração ou difusão.
+                Implementamos medidas técnicas e organizativas de segurança, incluindo criptografia em trânsito (TLS),
+                autenticação de dois fatores opcional, logs de auditoria imutáveis, e retenção de dados conforme regulamentações de compliance.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-zinc-900 mb-3">7. Cookies</h2>
+              <h2 className="text-lg font-semibold text-zinc-900 mb-3">7. Cookies e Rastreamento</h2>
               <p>
-                Utilizamos cookies essenciais para manter sua sessão ativa e garantir o funcionamento técnico da plataforma.
+                Utilizamos cookies essenciais para manter sua sessão ativa e garantir funcionalidade da plataforma.
+                Usamos analytics anônimo para melhorar nossos serviços, sem identificação pessoal.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">8. Contato do Encarregado (DPO)</h2>
               <p>
-                Para exercer seus direitos ou tirar dúvidas sobre privacidade, entre em contato com nosso 
-                DPO pelo e-mail <a href="mailto:privacidade@gabinete.app" className="text-primary hover:underline">privacidade@gabinete.app</a>.
+                Para exercer seus direitos ou tirar dúvidas sobre privacidade, entre em contato com nosso
+                DPO pelo e-mail <a href="mailto:privacidade@aprovai.com.br" className="text-primary hover:underline">privacidade@aprovai.com.br</a>.
               </p>
             </section>
           </div>

@@ -12,8 +12,8 @@ export class ApiError extends Error {
 }
 
 const STORAGE_KEYS = {
-	USER: "@gabinete:user",
-	ACCESS_TOKEN: "@gabinete:access_token",
+	USER: "@aprovai:user",
+	ACCESS_TOKEN: "@aprovai:access_token",
 } as const;
 
 interface FailedRequest {

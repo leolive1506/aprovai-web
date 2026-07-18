@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
-import { WHATSAPP_URL } from "@/pages/public/landing/constants"
 import { AlertTriangle, PhoneCall, XCircle } from "lucide-react"
+
+const WHATSAPP_URL = "https://wa.me/5511999999999"
 
 interface Props {
   current: number

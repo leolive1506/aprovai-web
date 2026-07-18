@@ -20,7 +20,7 @@ export function TermsOfUsePage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">1. Aceitação dos Termos</h2>
               <p>
-                Ao acessar e usar a plataforma Gabinete, você concorda em cumprir e estar vinculado a estes Termos de Uso. 
+                Ao acessar e usar a plataforma Aprovai, você concorda em cumprir e estar vinculado a estes Termos de Uso.
                 Se você não concordar com qualquer parte destes termos, você não deve usar nossos serviços.
               </p>
             </section>
@@ -28,16 +28,18 @@ export function TermsOfUsePage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">2. Descrição do Serviço</h2>
               <p>
-                O Gabinete é uma plataforma de gestão de demandas públicas e transparência. O serviço permite que cidadãos 
-                registrem solicitações, acompanhem o progresso e visualizem resultados oficiais postados pelos gabinetes parceiros.
+                O Aprovai é uma plataforma SaaS de automação de fluxos de aprovação de compras e controle de orçamento.
+                O serviço permite que empresas centralizem pedidos de compra, automatizem rotas de aprovação, gerem relatórios
+                e mantenham controle total sobre gastos departamentais.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-zinc-900 mb-3">3. Cadastro e Segurança</h2>
+              <h2 className="text-lg font-semibold text-zinc-900 mb-3">3. Cadastro, Autenticação e Segurança</h2>
               <p>
-                Para utilizar certas funcionalidades, você pode ser solicitado a criar uma conta. Você é responsável por 
-                manter a confidencialidade de sua senha e por todas as atividades que ocorrem em sua conta.
+                Para utilizar a plataforma, você deve criar uma conta corporativa. Você é responsável por manter a confidencialidade
+                de sua senha, chaves de API e por todas as atividades que ocorrem em sua conta. Notifique-nos imediatamente de
+                qualquer acesso não autorizado.
               </p>
             </section>
 
@@ -45,41 +47,42 @@ export function TermsOfUsePage() {
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">4. Uso Adequado</h2>
               <p>Você concorda em não usar a plataforma para:</p>
               <ul className="list-disc pl-5 mt-3 space-y-2">
-                <li>Postar conteúdo ilegal, ofensivo ou difamatório;</li>
-                <li>Enviar informações falsas ou enganosas;</li>
-                <li>Interferir na segurança ou integridade da plataforma;</li>
-                <li>Praticar spam ou assédio contra membros de gabinetes ou outros usuários.</li>
+                <li>Enviar informações falsas ou enganosas sobre pedidos e fornecedores;</li>
+                <li>Interferir na segurança, integridade ou disponibilidade da plataforma;</li>
+                <li>Violar qualquer lei ou regulamentação fiscal/contábil aplicável;</li>
+                <li>Comercializar, revender ou oferecer acesso a terceiros sem consentimento.</li>
               </ul>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">5. Propriedade Intelectual</h2>
               <p>
-                Todo o conteúdo e software associados à plataforma são de propriedade exclusiva do Gabinete ou de seus licenciadores. 
-                O uso da plataforma não concede a você nenhum direito de propriedade intelectual sobre o serviço.
+                Todo o conteúdo, software, algoritmos e metodologias associados à plataforma Aprovai são propriedade exclusiva
+                de seus proprietários. O uso da plataforma não concede a você direitos de propriedade intelectual sobre o serviço.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">6. Limitação de Responsabilidade</h2>
               <p>
-                O Gabinete atua como facilitador de comunicação. Não nos responsabilizamos pela execução física das demandas 
-                registradas, que permanecem sob responsabilidade legal dos respectivos órgãos e gabinetes públicos.
+                O Aprovai fornece a infraestrutura e ferramentas para automação de aprovação de compras. Você é responsável
+                pela configuração correta de regras, hierarquias de aprovação e cumprimento de suas políticas internas. Não
+                nos responsabilizamos por decisões de negócio ou conformidade resultantes do uso da plataforma.
               </p>
             </section>
 
             <section>
-              <h2 className="text-lg font-semibold text-zinc-900 mb-3">7. Alterações nos Termos</h2>
+              <h2 className="text-lg font-semibold text-zinc-900 mb-3">7. Alterações nos Termos e Serviço</h2>
               <p>
-                Reservamo-nos o direito de modificar estes termos a qualquer momento. Notificaremos os usuários sobre 
-                alterações significativas através da plataforma ou por e-mail.
+                Reservamo-nos o direito de modificar estes termos ou os recursos da plataforma a qualquer momento.
+                Notificaremos sobre alterações significativas com antecedência através da plataforma ou por e-mail.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">8. Contato</h2>
               <p>
-                Dúvidas sobre estes termos podem ser enviadas para <a href="mailto:suporte@gabinete.app" className="text-primary hover:underline">suporte@gabinete.app</a>.
+                Dúvidas sobre estes termos podem ser enviadas para <a href="mailto:suporte@aprovai.com.br" className="text-primary hover:underline">suporte@aprovai.com.br</a>.
               </p>
             </section>
           </div>

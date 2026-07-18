@@ -14,7 +14,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { DemandsForm } from "@/pages/private/demands/components/demands-form";
-import Logo from "../../../assets/logo-new.png";
+import Logo from "../../../assets/aprovai.svg";
 import { ChevronDown, ClipboardListIcon, LogOut, Menu, Settings, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 

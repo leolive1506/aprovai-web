@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import LoginLeft from '../../../assets/login-left.png'
 import LoginRight from '../../../assets/login-right.png'
-import Logo from '../../../assets/logo-new.png'
+import Logo from '../../../assets/aprovai.svg'
 import { SignUpForm } from './components/sign-up-form'
 
 export function SignUp() {

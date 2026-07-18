@@ -35,7 +35,7 @@ import {
 import type { ReactNode } from "react"
 import { Link, useLocation } from "react-router-dom"
 import IconLogo from "../../../assets/icon.svg"
-import Logo from "../../../assets/logo-new.png"
+import Logo from "../../../assets/aprovai.svg"
 import {
   Sidebar,
   SidebarContent,

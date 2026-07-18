@@ -1,4 +1,4 @@
-import Logo from "@/assets/logo-new.png"
+import Logo from "@/assets/aprovai.svg"
 import { useAcceptInvitation, useGetInvitationByToken } from "@/api/cabinets/hooks"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/use-auth"

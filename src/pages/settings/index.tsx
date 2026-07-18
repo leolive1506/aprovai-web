@@ -2,11 +2,7 @@ import { useState, useMemo } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Tabs as TabsPrimitive } from "radix-ui";
 import { PersonalInfoCard } from "./components/personal-info-card";
-import { CabinetInfoCard } from "./components/cabinet-info-card";
-import { CabinetSharingCard } from "./components/cabinet-sharing-card";
 import { SecurityCard } from "./components/security-card";
-import { NeighborhoodSettingsCard } from "./components/neighborhood-settings-card";
-import { CabinetPageBuilder } from "./components/cabinet-page-builder";
 import { useAuth } from "@/hooks/use-auth";
 import { User, Building2, Monitor, MapPin } from "lucide-react";
 import { UserRole } from "@/api/users/types";
@@ -35,13 +31,8 @@ export function Settings() {
   );
 
   const tabs = useMemo(() => [
-    { value: "profile", label: "Meu Perfil" },
-    { value: "location", label: "Localização" },
-    ...(user?.isCabinetMember ? [
-      { value: "cabinet", label: "Meu Gabinete" },
-      { value: "page-builder", label: "Página Pública" }
-    ] : []),
-  ], [user?.isCabinetMember]);
+    { value: "profile", label: "Meu Perfil" }
+  ], []);
 
   return (
     <div className="flex-1 px-4 sm:px-8 lg:px-12 pt-8 pb-16">
@@ -103,28 +94,6 @@ export function Settings() {
                 <SecurityCard />
               </TabsContent>
 
-              <TabsContent value="location" className="space-y-4 outline-none focus-visible:ring-0 mt-0">
-                <NeighborhoodSettingsCard />
-              </TabsContent>
-
-              <TabsContent value="cabinet" className="space-y-4 outline-none focus-visible:ring-0 mt-0">
-                {hasStorageLimit && usage && (
-                  <div className="rounded-xl border border-border/60 bg-card px-4 py-3">
-                    <PlanLimitBanner
-                      current={usage.storageUsedBytes}
-                      max={plans!.limits.maxStorageBytes!}
-                      label="Armazenamento"
-                      formatValue={formatBytes}
-                    />
-                  </div>
-                )}
-                <CabinetInfoCard />
-                <CabinetSharingCard />
-              </TabsContent>
-
-              <TabsContent value="page-builder" className="space-y-4 outline-none focus-visible:ring-0 mt-0">
-                <CabinetPageBuilder />
-              </TabsContent>
             </main>
           </div>
 

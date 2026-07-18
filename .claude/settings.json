@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/c/projeto/aprovia/aprovai-web\" && rm -rf \\\\ *)",
+      "Bash(pnpm lint *)",
+      "Bash(pnpm tsc *)",
+      "Bash(rm -rf src/pages/public/landing/components/consent-overlay.tsx)",
+      "Bash(sed -i '' 's/Gabinete App/Aprovai/g; s/Gabinete/Plataforma de Compras/g; s/demandas/pedidos de compra/g; s/gabinetes/empresas/g' src/pages/public/landing/components/*.tsx)"
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-import Logo from '@/assets/logo-new.png'
+import Logo from '@/assets/aprovai.svg'
 import { ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ResetPasswordForm } from './components/reset-password-form'

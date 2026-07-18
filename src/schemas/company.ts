@@ -4,8 +4,8 @@ const fileSchema = z.custom<File>((v) => v instanceof File, {
   message: "Arquivo inválido.",
 })
 
-const cabinetFields = z.object({
-  name: z.string().min(1, "Informe o nome do gabinete."),
+const companyFields = z.object({
+  name: z.string().min(1, "Informe o nome da empresa."),
   email: z
     .string()
     .optional()
@@ -16,10 +16,10 @@ const cabinetFields = z.object({
   avatar: z.array(fileSchema).max(1, "Selecione apenas 1 imagem.").optional(),
 })
 
-export const createCabinetWithOwnerSchema = z
+export const createCompanyWithOwnerSchema = z
   .object({
     ownerUserId: z.string().uuid("Selecione um responsável."),
   })
-  .and(cabinetFields)
+  .and(companyFields)
 
-export type CreateCabinetWithOwnerFormData = z.infer<typeof createCabinetWithOwnerSchema>
+export type CreateCompanyWithOwnerFormData = z.infer<typeof createCompanyWithOwnerSchema>

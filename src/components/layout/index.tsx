@@ -2,10 +2,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "./components/app-sidebar";
-import { Header } from "./components/header";
-import { CitizenHeader } from "./components/citizen-header";
 import { ConsentOverlay } from "../auth/consent-overlay"
-import { NeighborhoodOnboardingModal } from "./components/neighborhood-onboarding-modal";
 import { SubscriptionStatusBanner } from "../subscription-status-banner";
 
 import { UserRole } from "@/api/users/types";
@@ -32,7 +29,6 @@ export function Layout() {
       >
         <AppSidebar />
         <SidebarInset className="sm:border sm:border-muted sm:shadow-2xl">
-          <Header />
           <div className="p-3 sm:p-6">
             <SubscriptionStatusBanner />
             <Outlet />
@@ -45,12 +41,10 @@ export function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <CitizenHeader />
       <div className="pt-20 px-3 pb-3 sm:px-6 sm:pb-6 min-h-screen bg-[#F8F8F8]">
         <Outlet />
       </div>
       <ConsentOverlay />
-      <NeighborhoodOnboardingModal />
     </div>
   );
 }

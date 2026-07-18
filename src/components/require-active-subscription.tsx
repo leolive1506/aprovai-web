@@ -1,7 +1,8 @@
 import { useCabinetFeatures } from "@/hooks/use-cabinet-features"
-import { WHATSAPP_URL } from "@/pages/public/landing/constants"
 import { PhoneCall, ShieldAlert } from "lucide-react"
 import type { ReactNode } from "react"
+
+const WHATSAPP_URL = "https://wa.me/5511999999999"
 
 interface Props {
   children: ReactNode
