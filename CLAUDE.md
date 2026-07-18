@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-React SPA (Single Page Application) for the Gabinete platform — a civic engagement system where citizens report public demands and political/administrative Cabinets manage and resolve them. Supports authenticated users, guest/anonymous submissions, cabinet staff workflows, and platform-wide admin.
+React SPA for **AprovIA** — an approval management platform. Users log in (or via Google OAuth), manage demands/approvals, teams, and reports. Includes a platform-wide admin area.
 
-**Stack:** React 19, TypeScript, Vite, React Router v7, TanStack React Query, React Hook Form + Zod, Tailwind CSS, Base UI, Recharts, React Leaflet, Socket.io client
+> User-facing text must always say **"AprovIA"** (never "Aprovai" / "AprovAI").
+
+**Stack:** React 19, TypeScript, Vite, React Router v7, TanStack React Query, React Hook Form + Zod, Tailwind CSS v4, shadcn/ui, Recharts, Socket.io client
 
 ## Commands
 
@@ -17,218 +19,158 @@ pnpm lint       # ESLint
 pnpm preview    # Preview production build
 ```
 
-Use `pnpm` as the package manager (not npm). The `@` alias resolves to `/src`.
+Use `pnpm` (not npm). The `@` alias resolves to `/src`.
+
+## Architecture
+
+```
+src/
+  api/           # Axios API modules — one folder per backend domain
+  assets/        # Static assets (logo: aprovai.svg)
+  components/    # Shared/reusable components
+    ui/          # stateless/shadcn primitives (display + events only)
+    form/        # wrappers connecting UI to React Hook Form (Controller/useFormContext)
+    layout/      # layout wrappers (sidebar Layout, SplashScreen)
+  contexts/      # React contexts (auth, socket, theme, page title)
+  hooks/         # Custom hooks (useAuth, useDebounce, useMobile, usePageTitle...)
+  lib/           # Utilities (cn, helpers)
+  pages/         # Page components mapped 1:1 to routes
+  routes/        # Route definitions and guards (app-router.tsx)
+  validation-schemas/  # Zod schemas
+  types/         # TypeScript interfaces and enums
+```
+
+**Routes** (see `src/routes/app-router.tsx` — single source of truth):
+- Public: `/login`, `/sign-up`, `/forgot-password`, `/reset-password`, `/verify-email`, `/auth/callback`, `/confirm-password`, `/invites/:token`, `/termos-de-uso`, `/politica-de-privacidade`
+- Authenticated (inside `Layout`): `/settings`, `/profile/:userId`
+- MEMBER: `/home`, `/demands`, `/minhas-tarefas`, `/equipe`, `/relatorios`
+- ADMIN: `/admin`, `/admin/users`, `/admin/plans`
+
+**Data fetching:** TanStack React Query for all server state; no Redux. Axios calls live in `src/api/[domain]/index.ts` (domain object, e.g. `AuthApi`), types in `types.ts`, React Query hooks in `hooks.ts`.
+
+**API client** (`src/api/index.ts`): Bearer token from localStorage, automatic refresh (60s expiry buffer) with failed-request queue, typed `ApiError`.
+
+**Auth:** `AuthContext` — user, login/logout, token in localStorage, auto-init on mount. Route guard: `ProtectedRoute allowedRoles={[...]}`. `UserRole`: `ADMIN | MEMBER | CITIZEN`.
+
+**Real-time:** `SocketContext` connects after login and invalidates React Query keys on events — components never subscribe to the socket directly.
 
 ## Coding Standards
 
 **Components:**
-- Always use `function` declarations, not arrow functions
-- Named exports only (no default exports)
-- File names: `kebab-case.tsx`; component names: `PascalCase`
-- Styling: `className` prop + `cn()` utility — never inline styles
-- For rare custom CSS, add to `index.css` and reference the class
-- Support dark/light mode using Tailwind theme variables (`text-foreground`, `bg-background`, etc.)
-- Never recreate UI primitives that already exist in `src/components/ui`; install missing shadcn components via the shadcn CLI
+- `function` declarations, never arrow functions for components
+- Named exports only — no default exports
+- Files: `kebab-case.tsx`; components: `PascalCase`; hooks: `useCamelCase`; constants: `UPPER_SNAKE_CASE`; handlers: `handle*`
+- Extract a component when the same JSX appears in 2+ places, or a block passes ~50 lines with clear responsibility
+- Never recreate primitives that exist in `src/components/ui`; install missing shadcn components via the shadcn CLI
+- No code comments (exception: non-obvious external constraints/workarounds). No `console.log`.
 
-**Component layers:**
-- `src/components/ui` — stateless/shadcn components (display + events only)
-- `src/components/form` — wrappers that connect UI components to React Hook Form via `Controller` or `useFormContext`
-- `src/components/layout` — layout wrappers
+**Styling:**
+- Tailwind only, via `className` + `cn()` — never inline styles and **never add custom classes to `index.css`** (the only CSS that lives there are theme tokens, fonts and keyframes that Tailwind can't express)
+- Use semantic tokens (`text-foreground`, `bg-card`, `border-border`) so dark mode works automatically; never hardcode hex/rgb in `className`
+- Class order: dimension → layout → space → visual → state → responsive
+- Conditional classes via `cn(base, cond && "...")` — no template-string ternaries
 
 **Forms & validation:**
-- Always validate with Zod schemas defined in `src/schemas/`
-- Export the inferred TypeScript type from each schema
-- Keep components declarative; move complex logic into domain hooks (`src/api/[domain]/hooks.ts`) or global hooks (`src/hooks/`)
-
-**API module structure** (`src/api/[domain]/`):
-- `index.ts` — domain object with Axios calls (e.g., `export const AuthApi = { login, ... }`)
-- `types.ts` — TypeScript interfaces for the domain
-- `hooks.ts` — TanStack Query hooks (useQuery / useMutation)
+- React Hook Form + Zod schemas in `src/validation-schemas/`; export the inferred type from each schema
+- Registration password minimum is 8 chars (`register.ts`) — do not lower; the backend DTO enforces the same
+- Keep components declarative; complex logic goes to domain hooks (`src/api/[domain]/hooks.ts`) or `src/hooks/`
 
 **Feedback & UX:**
-- Use `toast` (sonner) for mutation feedback
-- Use generic dialogs for complex interactions
-- Use early returns to keep code flat and readable
-- **Confirmation dialogs are mandatory for any irreversible or high-impact action** — this includes deleting any record, deactivating/activating entities, and any mutation that is hard or impossible to undo. Never fire these mutations directly from a button click. Always show a `Dialog` with a clear description of the consequence and a destructive confirm button first.
+- `toast` (sonner) for mutation feedback — never `alert()`
+- Loading state on every async mutation (`Loader2` spinner in button, `disabled` while pending)
+- **Confirmation dialogs are mandatory for irreversible/high-impact actions** (delete, deactivate, etc.). Never fire these from a raw button click — always a `Dialog` describing the consequence with a destructive confirm button
+- Early returns to keep code flat
 
 **General:**
 - Do not introduce new libraries without explicit instruction
 - When unsure, check existing files to maintain consistency
 
-## Architecture
+## Design System
 
-**File structure:**
+### Brand Palette
+
+Extracted from the logo (`src/assets/aprovai.svg`) and exposed as Tailwind tokens in `index.css` (`@theme inline`). Always use the preset — never the raw hex:
+
+| Token | Value | Tailwind usage | Role |
+|-------|-------|----------------|------|
+| `brand` | `#7409F4` | `bg-brand`, `text-brand`, `from-brand` | Logo purple (static, same in dark mode) |
+| `brand-deep` | `oklch(0.5 0.235 292)` | `to-brand-deep` | Darker purple — gradient end |
+| `success` | `#08DA81` | `text-success`, `bg-success/10` | Logo green — positive states |
+| `ink` | `#191C1E` | `text-ink` | Logo near-black |
+| `primary` | purple (theme-aware) | `bg-primary`, `text-primary` | Brand purple that adapts to dark mode — default for actions |
+
+Prefer `primary` for interactive elements (it lightens in dark mode); use `brand`/`brand-deep` for fixed brand moments like gradients.
+
+**Primary button gradient** (login/sign-up pattern):
 ```
-src/
-  api/           # Axios API modules — one folder per backend module
-  components/    # Shared/reusable UI components
-  contexts/      # React contexts (auth, socket, theme, page title)
-  hooks/         # Custom hooks
-  lib/           # Utilities and helpers
-  pages/         # Page components mapped 1:1 to routes
-  routes/        # Route definitions and guards
-  schemas/       # Zod validation schemas
-  types/         # TypeScript interfaces and enums
+bg-linear-to-b from-primary to-brand-deep text-white hover:brightness-110 cursor-pointer
 ```
 
-**Data fetching:** TanStack React Query for all server state; no Redux. API calls live in `src/api/` and are consumed via React Query hooks in pages/components.
+### Semantic Tokens
 
-**Forms:** React Hook Form + Zod schemas in `src/schemas/`.
+CSS custom properties in `index.css`, consumed via Tailwind classes:
 
-**Routing:** React Router v7 with nested layouts. Route guards: `ProtectedRoute` (requires auth), `PrivateRoute` (requires cabinet member role), `PublicRoute` (blocks authenticated users).
+| Token | Use |
+|-------|-----|
+| `background` / `foreground` | Page background / main text |
+| `card` / `card-foreground` | Elevated surfaces |
+| `primary` / `primary-foreground` | Primary actions |
+| `muted` / `muted-foreground` | Low-contrast surface / secondary text, labels, placeholders |
+| `accent` | Menu item hover (same value as muted) |
+| `border` / `input` | Dividers and field borders |
+| `ring` | Focus outline |
+| `destructive` | Errors and destructive actions |
+| `sidebar*` | Sidebar surface/text |
 
-## Pages & Routes
+### Typography
 
-### Public (no auth required)
-| Path | Page | Description |
-|------|------|-------------|
-| `/` or `/landing` | Landing | Hero, features, testimonials |
-| `/login` | Login | Email/password login |
-| `/sign-up` | SignUp | User registration |
-| `/forgot-password` | ForgotPassword | Send reset email |
-| `/reset-password` | ResetPassword | Complete password reset |
-| `/verify-email` | VerifyEmail | Email verification |
-| `/auth/callback` | AuthCallback | Google OAuth callback |
-| `/confirm-password` | ConfirmPassword | Password change confirmation |
-| `/termos-de-uso` | TermsOfUse | Static terms page |
-| `/politica-de-privacidade` | PrivacyPolicy | Static privacy page |
-| `/pesquisa/:token` | Survey | Post-resolution demand survey |
-| `/cabinets/invites/:token` | AcceptInvitation | Accept cabinet member invitation |
-| `/cabinet/:slug` | PublicCabinet | Public cabinet profile + anonymous demand reporting |
+Font: **Geist Variable** (`font-sans`, applied globally). `font-brand` (Montserrat) only for logo/brand contexts.
 
-### Authenticated (CITIZEN, MEMBER, ADMIN)
-| Path | Page | Description |
-|------|------|-------------|
-| `/feed` | Feed | Main feed of all demands with filters |
-| `/map` | Map | Geographic map + heatmap of demands |
-| `/demand-comments/:id` | DemandComments | Demand detail with comment thread |
-| `/my-demands` | MyDemands | Citizen's own demands with statistics |
-| `/my-neighborhood` | MyNeighborhood | Neighborhood dashboard — demands, categories, cabinets (CITIZEN only) |
-| `/cabinets` | Cabinets | Browse all cabinets |
-| `/profile` | Profile | User profile management |
-| `/settings` | Settings | Cabinet branding, personal info, security |
+| Class | Use |
+|-------|-----|
+| `text-2xs` | Meta labels, counters (custom `@utility` — don't use `text-[10px]`) |
+| `text-xs` | Labels, meta, captions |
+| `text-sm` | **Default** body text in components |
+| `text-base` | Page section titles |
+| `text-xl` | Highlighted numbers/metrics |
 
-### Cabinet Staff (MEMBER role — `/private/*`)
-| Path | Page | Description |
-|------|------|-------------|
-| `/private/home` | Dashboard | Cabinet dashboard with metrics and analytics |
-| `/private/demands` | Demands | Demand management table with advanced filtering |
-| `/private/my-tasks` | MyTasks | Demands assigned to the current staff member |
-| `/private/team` | Team | Team member management (invite, remove, change role) |
-| `/private/reports` | Reports | Analytics reports, trend charts, category breakdown |
+Weights: `font-medium` (labels/values), `font-semibold` (card titles), `font-bold` (highlight numbers).
 
-### Admin (`/admin/*`)
-| Path | Page | Description |
-|------|------|-------------|
-| `/admin` | AdminDashboard | Platform-wide admin dashboard |
-| `/admin/denuncias` | AdminReports | Review and moderate reported demands |
-| `/admin/users` | AdminUsers | User management (enable/disable) |
-| `/admin/reports` | AdminAnalytics | Platform-wide analytics |
+Section label pattern: `text-2xs font-semibold uppercase tracking-widest text-muted-foreground`
 
-## Key Components
+### Radius & Shadows
 
-**Feature components** (in `src/components/`):
-- `DemandDetailSheet` — Slide-over panel showing full demand details
-- `CreateResultDialog` — Modal for creating a resolution result; `type` is always `OTHER` internally (removed from UI)
-- `UpdateProgressDialog` — Modal for updating demand status; requires ≥1 result before RESOLVED; `onNeedsResults` callback opens `CreateResultDialog`
-- `NeighborhoodOnboardingModal` — Auto-shows for authenticated citizens with 0 saved neighborhoods; dismissible per session via `sessionStorage`
-- `DemandStaleBadge` — Badge showing days without update (amber ≥15 days, red ≥30 days); hidden for terminal statuses
-- `ClaimDemandFlow` — Multi-step flow for cabinet staff to claim an open demand
-- `InviteMemberDialog` — Invite team member by email
-- `ReportDemandDialog` — Citizen reporting/flagging a demand
-- `AuthRequiredModal` — Prompts unauthenticated users to log in before acting
-- `Gallery` — Image gallery for evidence files and result images
-- `Post` — Demand card rendered in the feed
-- `UserDropdown` — User menu with logout and profile navigation
-- `DemandStatusBadge` — Status chip with color coding
-- `TeamSwitcher` — Switch between cabinets in cabinet staff context
+Base `--radius: 0.3rem`. Practical mapping: `rounded-lg` buttons/inputs/dropdowns · `rounded-xl` cards/panels · `rounded-2xl` modals/sheets · `rounded-full` avatars/dots/pills. (Auth screens use `rounded-xl` on inputs/buttons at `h-11`.)
 
-**UI primitives** (in `src/components/ui/`):
-- `NeighborhoodSearchInput` — Google Places autocomplete filtered to `neighborhood/sublocality` types; accepts optional `locationBias` (GPS coords)
-- `CitySelect` — City combobox fetched from IBGE API (`/localidades/estados/:uf/municipios`); disabled until state is selected; clears city on state change
+Shadows: `shadow-xs`/`shadow-sm` resting cards, `shadow-md` hover/dropdowns, `shadow-lg` modals. Flat list cards: no shadow, `border-border`. No custom shadows.
 
-**Layouts:**
-- `Layout` — Main authenticated layout with sidebar navigation
-- `SplashScreen` — Loading screen on app initialization
+### Animation
 
-## Contexts & State
+- Micro-interactions 150ms, state transitions 200ms, element entry 300–500ms with `cubic-bezier(0.22, 1, 0.36, 1)`
+- List stagger: `animationDelay: i * 40ms` (max ~10 items)
+- Interactive cards: `shadow-sm hover:shadow-md transition-all duration-150`
+- Never `animate-bounce`; no animations > 600ms on frequent interactions
 
-- `AuthContext` (`contexts/auth-context/`) — authenticated user, selected cabinet, login/logout, token storage in localStorage, auto-init on mount
-- `SocketContext` (`contexts/socket-context.tsx`) — Socket.io connection for real-time demand/notification updates
-- `PageTitleContext` (`contexts/page-title-context.tsx`) — Dynamic `<title>` management
-- `ThemeProvider` (`contexts/theme-provider.tsx`) — Dark/light mode via next-themes
+### UI Patterns
 
-## Custom Hooks
+- **Empty state:** centered icon in `size-14 rounded-full bg-muted` circle + title `text-sm font-semibold` + hint `text-xs text-muted-foreground`
+- **Dialog widths:** `sm:max-w-sm` / `sm:max-w-md` (default) / `sm:max-w-lg`
+- **Dropdown item icons:** `size-3.5 text-zinc-400`; destructive items use `variant="destructive"`
+- **Buttons:** use the `Button` component variants/sizes — don't rebuild sizes via className when a `size` exists
 
-- `useAuth()` — Current user profile and auth actions
-- `useCurrentMember()` — Current user's role within the active cabinet (OWNER/STAFF)
-- `useDebounce()` — Debounced value for search inputs
-- `useMobile()` — Boolean for responsive breakpoint detection
-- `usePageTitle()` — Set the current page title
-- `useDataTable()` — Sorting, pagination, and filter state for data tables
+## Performance Rules
 
-## API Integration
+- Query keys: `["domain"]` broad → `["domain", params]` filtered → `["domain", id]` single. Mutations invalidate the parent key.
+- `placeholderData: (prev) => prev` on paginated lists; prefer `invalidateQueries` over `refetchQueries`
+- Never duplicate the same request across components — extract a shared hook (React Query dedupes)
+- No `useEffect` for derived state — use `useMemo`
+- Pages are lazy-loaded via React Router (see `app-router.tsx`)
 
-**Client** (`src/api/index.ts`): Axios instance with:
-- Bearer token injected from localStorage on every request
-- Automatic access token refresh (60-second expiry buffer) with failed-request queue
-- Custom `ApiError` class for typed error handling
+## Pre-PR Checklist
 
-**API modules** (one folder per backend domain):
-- `auth/` — register, login, refresh, verify-email, forgot/reset/change password, Google OAuth
-- `demands/` — CRUD, claim, assign, comments, likes, report, evidence upload (presigned), progress update, surveys, analytics
-- `cabinets/` — CRUD, member management, invitations
-- `users/` — profile, avatar upload
-- `neighborhood/` — user neighborhood CRUD (`list`, `add`, `remove`, `setPrimary`) + `getDashboard` for the neighborhood feed
-- `categories/` — list and manage demand categories
-- `results/` — CRUD, image and protocol upload
-- `notifications/` — list, mark read
-- `admin/` — admin-only operations
-
-## Validation Schemas (`src/schemas/`)
-
-- `login` — email + password
-- `register` — full registration form
-- `forgot-password` — email only
-- `reset-password` — new password + confirmation
-- `cabinet-wizard` — multi-step cabinet creation
-- `demand` — demand create/edit
-- `admin-user` — admin user creation
-
-## Types & Enums (`src/types/`)
-
-**Enums:**
-- `UserRole`: `ADMIN | MEMBER | CITIZEN`
-- `CabinetRole`: `OWNER | STAFF`
-- `DemandStatus`: `SUBMITTED | IN_ANALYSIS | IN_PROGRESS | RESOLVED | REJECTED | CANCELED`
-- `DemandPriority`: `LOW | MEDIUM | HIGH | URGENT`
-- `ResultType`: `INFRASTRUCTURE | SOCIAL | LEGISLATIVE | OTHER`
-- `NotificationType`: `INFO | SUCCESS | WARNING | ERROR`
-
-**Key interfaces:**
-- `Demand` — title, description, status, priority, location (lat/long, address, city, state), reporterId or guestEmail, cabinetId, categoryId, evidence list, likes, comments
-- `Cabinet` — name, slug, email, branding (avatar, banner, logo, primaryColor, secondaryColor), social links, score, stats
-- `User` — id, name, email, role, avatar, location fields
-- `Evidence` — storageKey, url, mimeType, size
-- `DemandComment` — comment body, author, isCabinetResponse flag
-- `CabinetDashboardSummary` — total/open/resolved demand counts, resolution rate, response time
-- `CabinetReport` — full analytics report with trend data, category breakdown, heatmap points
-- `MyDemandsSummary` — citizen statistics: total submitted, resolved, in-progress
-
-## Key Domain Rules
-
-**Guest Flow:** The public cabinet page (`/cabinet/:slug`) allows demand submission without login. The form captures `guestEmail`. If the guest later registers with the same email, the API links their past demands.
-
-**File Uploads:** Evidence and result images go directly to S3 via presigned URLs. The API returns a presigned URL; the client PUTs the file directly to S3, then calls the confirm endpoint.
-
-**Real-time:** Socket.io connection is established after login. Listens for demand status changes and new notifications.
-
-**Dark Mode:** Managed by `ThemeProvider`. Components use Tailwind `dark:` variants. Toggle via `ThemeToggle` component.
-
-**Neighborhood flow:** `/my-neighborhood` is citizen-only (`ProtectedRoute allowedRoles={[CITIZEN]}`). `NeighborhoodOnboardingModal` in `Layout` auto-opens for authenticated citizens without any saved neighborhood. Manual input requires selecting state first, then city via `CitySelect` (IBGE API). Neighborhood name always comes from Google Places autocomplete (`NeighborhoodSearchInput`) — never free text. City mismatch between selected neighborhood and registered city shows an inline conflict card and blocks saving.
-
-**Result → demand status:** Deleting the last result of a RESOLVED demand automatically reverts it to IN_PROGRESS (handled server-side via EventEmitter; no client-side action needed).
-
-**Password validation:** Registration requires min 8 characters (schema `src/validation-schemas/register.ts`). Do not lower this — backend DTO enforces the same minimum.
-
-**Cabinet Context:** Cabinet staff pages (`/private/*`) require the user to have an active cabinet selected in `AuthContext`. `useCurrentMember()` returns the user's role in that cabinet.
+- [ ] Semantic tokens used — no hardcoded colors, nothing added to index.css
+- [ ] Dark mode works (`.dark`)
+- [ ] Forms use react-hook-form + zod
+- [ ] Mutations invalidate correct query keys; loading/error states covered
+- [ ] Named exports only; no comments/console.log
+- [ ] User-facing text says "AprovIA"

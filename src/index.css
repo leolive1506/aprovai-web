@@ -104,6 +104,10 @@
   --font-heading: var(--font-sans);
   --font-brand: 'Montserrat', sans-serif;
   --font-sans: 'Geist Variable', sans-serif;
+  --color-brand: #7409f4;
+  --color-brand-deep: oklch(0.5 0.235 292);
+  --color-success: #08da81;
+  --color-ink: #191c1e;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

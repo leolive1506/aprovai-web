@@ -169,7 +169,7 @@ export function SignUpForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-[oklch(0.5_0.235_292)] text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:opacity-60"
+          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-brand-deep text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:opacity-60"
         >
           {isLoading
             ? <div className="flex items-center gap-2"><Loading /><span>Criando...</span></div>
