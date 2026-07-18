@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/use-auth";
+import { Loading } from "@/components/loading";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "./components/app-sidebar";
@@ -10,8 +11,20 @@ import { UserRole } from "@/api/users/types";
 const rolesWithSidebar: UserRole[] = [UserRole.ADMIN, UserRole.MEMBER]
 
 export function Layout() {
-  const { user, hasRoleAdmin } = useAuth();
+  const { user, isInitializing, hasRoleAdmin } = useAuth();
   const { pathname } = useLocation();
+
+  if (isInitializing) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loading className="text-primary size-6" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   if (hasRoleAdmin() && pathname === "/") {
     return <Navigate to="/admin" replace />;

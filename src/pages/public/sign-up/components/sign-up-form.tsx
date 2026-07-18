@@ -1,11 +1,12 @@
+import Logo from '@/assets/aprovai.svg'
 import { useRegister } from '@/api/auth/hooks'
+import { GoogleAuthButton } from '@/components/google-auth-button'
 import { InputForm } from '@/components/form/input-form'
 import { Loading } from '@/components/loading'
-import { Button } from '@/components/ui/button'
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { registerFormSchema, type RegisterFormData } from '@/validation-schemas/register'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Check, X } from 'lucide-react'
+import { Check, Eye, EyeOff, X } from 'lucide-react'
+import { useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -30,6 +31,7 @@ function parseApiError(err: unknown): { field?: 'email' | 'password'; message: s
 export function SignUpForm() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const [showPassword, setShowPassword] = useState(false)
   const { mutateAsync: registerUser, isPending } = useRegister()
 
   const redirectParam = searchParams.get('redirect')
@@ -64,63 +66,76 @@ export function SignUpForm() {
   })
 
   return (
-    <form onSubmit={onSubmit}>
-      <FieldGroup>
-        <Field>
-          <FieldLabel className="text-zinc-600 font-medium">Seu nome completo</FieldLabel>
-          <InputForm
-            type="text"
-            name="name"
-            control={control}
-            autoComplete="name"
-            placeholder="Digite seu nome"
-            disabled={isLoading}
-            className="h-10"
-          />
-        </Field>
+    <div className="flex flex-col items-center">
+      <img src={Logo} alt="AprovIA" className="h-7 w-auto" />
 
-        <Field>
-          <FieldLabel className="text-zinc-600 font-medium">Seu melhor e-mail</FieldLabel>
-          <InputForm
-            type="email"
-            name="email"
-            control={control}
-            autoComplete="email"
-            placeholder="nome@exemplo.com"
-            disabled={isLoading}
-            className="h-10"
-          />
-        </Field>
+      <div className="mt-4 text-center">
+        <h1 className="text-xl font-bold tracking-tight text-neutral-700 dark:text-neutral-200">Criar sua conta</h1>
+      </div>
 
-        <Field>
-          <FieldLabel className="text-zinc-600 font-medium">Sua senha de acesso</FieldLabel>
-          <InputForm
-            control={control}
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Mínimo 8 caracteres"
-            disabled={isLoading}
-            className="h-10"
-          />
+      <form onSubmit={onSubmit} className="mt-4 w-full space-y-3">
+        <InputForm
+          type="text"
+          name="name"
+          id="name"
+          control={control}
+          autoComplete="name"
+          placeholder="Nome completo"
+          disabled={isLoading}
+          className="h-11 rounded-xl border-border bg-card px-3.5 shadow-xs transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
+        />
+
+        <InputForm
+          type="email"
+          name="email"
+          id="email"
+          control={control}
+          autoComplete="email"
+          placeholder="seu@email.com"
+          disabled={isLoading}
+          className="h-11 rounded-xl border-border bg-card px-3.5 shadow-xs transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
+        />
+
+        <div>
+          <div className="relative">
+            <InputForm
+              control={control}
+              name="password"
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="new-password"
+              placeholder="Senha"
+              disabled={isLoading}
+              className="h-11 w-full rounded-xl border-border bg-card px-3.5 pr-11 shadow-xs transition-shadow focus-visible:ring-2 focus-visible:ring-primary/40"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-muted-foreground transition-colors hover:text-foreground"
+              tabIndex={-1}
+              aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+            >
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
           {password.length > 0 && (
             <div className={cn(
-              "flex items-center gap-1.5 text-xs mt-1 transition-colors",
+              "mt-2 flex items-center gap-1.5 px-1 text-xs transition-colors",
               hasMinLength ? "text-emerald-600" : "text-muted-foreground",
             )}>
               {hasMinLength
-                ? <Check className="size-3 shrink-0" />
-                : <X className="size-3 shrink-0 text-destructive/70" />
+                ? <Check className="size-3.5 shrink-0" />
+                : <X className="size-3.5 shrink-0 text-destructive/70" />
               }
               <span className={!hasMinLength ? "text-destructive/80" : ""}>
                 Mínimo 8 caracteres
               </span>
             </div>
           )}
-        </Field>
+        </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-3">
+        <div className="pt-1">
+          <div className="flex items-center gap-2.5">
             <Controller
               control={control}
               name="termsAccepted"
@@ -133,60 +148,50 @@ export function SignUpForm() {
                 />
               )}
             />
-            <label htmlFor="terms" className="text-sm font-medium leading-none cursor-pointer text-zinc-600">
+            <label htmlFor="terms" className="cursor-pointer text-xs leading-relaxed text-muted-foreground">
               Aceito os{' '}
-              <Link to="/termos-de-uso" target="_blank" className="text-primary hover:underline">Termos de Uso</Link>
+              <Link to="/termos-de-uso" target="_blank" className="font-medium text-primary hover:underline">
+                Termos de Uso
+              </Link>
               {' '}e a{' '}
-              <Link to="/politica-de-privacidade" target="_blank" className="text-primary hover:underline">Política de Privacidade</Link>
+              <Link to="/politica-de-privacidade" target="_blank" className="font-medium text-primary hover:underline">
+                Política de Privacidade
+              </Link>
             </label>
           </div>
           {form.formState.errors.termsAccepted && (
-            <p className="text-xs font-medium text-destructive">
+            <p className="mt-1 text-xs font-medium text-destructive">
               {form.formState.errors.termsAccepted.message}
             </p>
           )}
         </div>
 
-        <Button type="submit" disabled={isLoading} className="h-10">
-          {isLoading
-            ? <div className="flex items-center gap-2"><Loading /><span>Criando conta...</span></div>
-            : 'Criar minha conta'
-          }
-        </Button>
-
-        <div className="relative my-2 flex items-center">
-          <div className="grow border-t border-muted border-dashed" />
-          <span className="mx-2 text-xs text-muted-foreground uppercase">Ou</span>
-          <div className="grow border-t border-muted border-dashed" />
-        </div>
-
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full relative flex items-center justify-center font-normal shadow-sm h-10 bg-white hover:bg-slate-50 text-slate-700 border-slate-200"
-          onClick={() => { window.location.href = `${import.meta.env.VITE_API_URL}/auth/google` }}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-[oklch(0.5_0.235_292)] text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:opacity-60"
         >
-          <svg className="w-5 h-5 absolute left-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-          </svg>
-          Continuar com o Google
-        </Button>
+          {isLoading
+            ? <div className="flex items-center gap-2"><Loading /><span>Criando...</span></div>
+            : 'Criar conta'
+          }
+        </button>
+      </form>
 
-        <p className="text-[10px] text-center text-muted-foreground mt-2 px-6">
-          Ao continuar, você concorda com nossos{' '}
-          <Link to="/termos-de-uso" className="underline hover:text-primary" target="_blank">Termos de Uso</Link>
-          {' '}e{' '}
-          <Link to="/politica-de-privacidade" className="underline hover:text-primary" target="_blank">Política de Privacidade</Link>.
-        </p>
+      <div className="mt-5 flex w-full items-center gap-3">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-xs text-muted-foreground">ou</span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
 
-        <p className="text-center text-zinc-500 text-sm mt-2">
-          Já possui uma conta?{' '}
-          <Link to="/login" className="text-primary font-bold hover:underline">Fazer login</Link>
-        </p>
-      </FieldGroup>
-    </form>
+      <GoogleAuthButton className="mt-5" />
+
+      <p className="mt-10 text-sm text-muted-foreground">
+        Já tem uma conta?{' '}
+        <Link to="/login" className="font-medium text-primary hover:underline">
+          Faça login
+        </Link>
+      </p>
+    </div>
   )
 }

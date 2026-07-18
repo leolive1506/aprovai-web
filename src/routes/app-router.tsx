@@ -21,7 +21,6 @@ const TermsOfUsePage = lazy(() => import("@/pages/public/terms-of-use").then((m)
 const PrivacyPolicyPage = lazy(() => import("@/pages/public/privacy-policy").then((m) => ({ default: m.PrivacyPolicyPage })));
 
 const Settings = lazy(() => import("@/pages/settings").then((m) => ({ default: m.Settings })));
-const DemandComments = lazy(() => import("@/pages/demand-comments").then((m) => ({ default: m.DemandComments })));
 const Profile = lazy(() => import("@/pages/profile").then((m) => ({ default: m.Profile })));
 
 const Demands = lazy(() => import("@/pages/private/demands").then((m) => ({ default: m.Demands })));
@@ -68,10 +67,6 @@ export function AppRouter() {
         <Route
           path="profile/:userId"
           element={<Suspense fallback={<PageLoader />}><Profile /></Suspense>}
-        />
-        <Route
-          path="comments/:demandId"
-          element={<Suspense fallback={<PageLoader />}><DemandComments /></Suspense>}
         />
 
         <Route

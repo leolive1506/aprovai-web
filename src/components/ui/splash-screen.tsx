@@ -43,7 +43,7 @@ export function SplashScreen({ onFinish, duration = 2000, loading = false }: Spl
       <img
         src={Logo}
         alt="Logo"
-        className={`w-48 transition-opacity ${opacity}`}
+        className={`w-72 sm:w-96 transition-opacity ${opacity}`}
       />
     </div>
   );
