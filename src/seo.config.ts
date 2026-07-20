@@ -6,7 +6,7 @@
  */
 
 export const SITE_CONFIG = {
-  name: "Aprovai",
+  name: "AprovIA",
   domain: "https://www.aprovai.com.br",
   defaultOgImage: "/og-default.png",
   locale: "pt_BR",
@@ -26,7 +26,7 @@ export interface PageSeoConfig {
 
 export const SEO_CONFIG: Record<string, PageSeoConfig> = {
   home: {
-    title: "Aprovai | Software de Aprovação de Compras",
+    title: "AprovIA | Software de Aprovação de Compras",
     description:
       "Centralize aprovações de compras, automatize fluxos e tenha controle total do seu orçamento. Plataforma SaaS de approval workflow para empresas.",
     canonical: "https://www.aprovai.com.br/",
@@ -36,32 +36,32 @@ export const SEO_CONFIG: Record<string, PageSeoConfig> = {
       "aprovação de compras, software approval, workflow de compras, controle de orçamento, automação de compras, SaaS empresarial",
   },
   termsOfUse: {
-    title: "Termos de Uso — Aprovai",
+    title: "Termos de Uso — AprovIA",
     description:
-      "Leia os Termos de Uso da plataforma Aprovai. Condições de uso, responsabilidades e diretrizes para usuários.",
+      "Leia os Termos de Uso da plataforma AprovIA. Condições de uso, responsabilidades e diretrizes para usuários.",
     canonical: "https://www.aprovai.com.br/termos-de-uso",
     ogType: "website",
     noindex: true,
   },
   privacyPolicy: {
-    title: "Política de Privacidade (LGPD) — Aprovai",
+    title: "Política de Privacidade (LGPD) — AprovIA",
     description:
-      "Saiba como o Aprovai coleta, usa e protege seus dados pessoais em conformidade com a LGPD — Lei nº 13.709/2018.",
+      "Saiba como o AprovIA coleta, usa e protege seus dados pessoais em conformidade com a LGPD — Lei nº 13.709/2018.",
     canonical: "https://www.aprovai.com.br/politica-de-privacidade",
     ogType: "website",
     noindex: true,
   },
   login: {
-    title: "Entrar — Aprovai",
-    description: "Acesse sua conta no Aprovai e centralize as aprovações de compras da sua empresa.",
+    title: "Entrar — AprovIA",
+    description: "Acesse sua conta no AprovIA e centralize as aprovações de compras da sua empresa.",
     canonical: "https://www.aprovai.com.br/login",
     ogType: "website",
     noindex: true,
   },
   signUp: {
-    title: "Criar conta grátis — Aprovai",
+    title: "Criar conta grátis — AprovIA",
     description:
-      "Cadastre-se gratuitamente no Aprovai e comece a automatizar aprovações de compras. Teste 14 dias, sem cartão de crédito.",
+      "Cadastre-se gratuitamente no AprovIA e comece a automatizar aprovações de compras. Teste 14 dias, sem cartão de crédito.",
     canonical: "https://www.aprovai.com.br/sign-up",
     ogType: "website",
     noindex: true,

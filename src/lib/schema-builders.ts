@@ -11,7 +11,7 @@ export function buildOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Aprovai",
+    name: "AprovIA",
     url: SITE_CONFIG.domain,
     logo: `${SITE_CONFIG.domain}/logo.svg`,
     description:
@@ -35,7 +35,7 @@ export function buildSoftwareApplicationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Aprovai",
+    name: "AprovIA",
     operatingSystem: "Web",
     applicationCategory: "BusinessApplication",
     url: SITE_CONFIG.domain,
@@ -90,7 +90,7 @@ export function buildWebSiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Aprovai",
+    name: "AprovIA",
     url: SITE_CONFIG.domain,
     inLanguage: "pt-BR",
     potentialAction: {

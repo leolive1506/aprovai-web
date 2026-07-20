@@ -20,7 +20,7 @@ export function TermsOfUsePage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">1. Aceitação dos Termos</h2>
               <p>
-                Ao acessar e usar a plataforma Aprovai, você concorda em cumprir e estar vinculado a estes Termos de Uso.
+                Ao acessar e usar a plataforma AprovIA, você concorda em cumprir e estar vinculado a estes Termos de Uso.
                 Se você não concordar com qualquer parte destes termos, você não deve usar nossos serviços.
               </p>
             </section>
@@ -28,7 +28,7 @@ export function TermsOfUsePage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">2. Descrição do Serviço</h2>
               <p>
-                O Aprovai é uma plataforma SaaS de automação de fluxos de aprovação de compras e controle de orçamento.
+                O AprovIA é uma plataforma SaaS de automação de fluxos de aprovação de compras e controle de orçamento.
                 O serviço permite que empresas centralizem pedidos de compra, automatizem rotas de aprovação, gerem relatórios
                 e mantenham controle total sobre gastos departamentais.
               </p>
@@ -57,7 +57,7 @@ export function TermsOfUsePage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">5. Propriedade Intelectual</h2>
               <p>
-                Todo o conteúdo, software, algoritmos e metodologias associados à plataforma Aprovai são propriedade exclusiva
+                Todo o conteúdo, software, algoritmos e metodologias associados à plataforma AprovIA são propriedade exclusiva
                 de seus proprietários. O uso da plataforma não concede a você direitos de propriedade intelectual sobre o serviço.
               </p>
             </section>
@@ -65,7 +65,7 @@ export function TermsOfUsePage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">6. Limitação de Responsabilidade</h2>
               <p>
-                O Aprovai fornece a infraestrutura e ferramentas para automação de aprovação de compras. Você é responsável
+                O AprovIA fornece a infraestrutura e ferramentas para automação de aprovação de compras. Você é responsável
                 pela configuração correta de regras, hierarquias de aprovação e cumprimento de suas políticas internas. Não
                 nos responsabilizamos por decisões de negócio ou conformidade resultantes do uso da plataforma.
               </p>

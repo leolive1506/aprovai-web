@@ -20,7 +20,7 @@ export function PrivacyPolicyPage() {
             <section>
               <h2 className="text-lg font-semibold text-zinc-900 mb-3">1. Introdução</h2>
               <p>
-                Esta Política de Privacidade descreve como o Aprovai coleta, usa e protege suas informações
+                Esta Política de Privacidade descreve como o AprovIA coleta, usa e protege suas informações
                 em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
               </p>
             </section>
