@@ -1,40 +1,22 @@
 import Logo from '@/assets/aprovai.svg'
-import { useRegister } from '@/api/auth/hooks'
 import { GoogleAuthButton } from '@/components/google-auth-button'
 import { InputForm } from '@/components/form/input-form'
-import { Loading } from '@/components/loading'
 import { registerFormSchema, type RegisterFormData } from '@/validation-schemas/register'
+import { useAuth } from '@/hooks/use-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, Eye, EyeOff, X } from 'lucide-react'
 import { useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { toast } from 'sonner'
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 
-function parseApiError(err: unknown): { field?: 'email' | 'password'; message: string } {
-  const e = err as { response?: { status?: number; data?: { message?: string | string[] } } }
-  const status = e.response?.status
-  const raw = e.response?.data?.message
-  const message = Array.isArray(raw) ? raw[0] : (raw ?? '')
-
-  if (status === 409 || (message && message.toLowerCase().includes('e-mail'))) {
-    return { field: 'email', message: 'Este e-mail já está cadastrado.' }
-  }
-  if (status === 400 && typeof message === 'string' && message.length > 0) {
-    return { message }
-  }
-  return { message: 'Erro ao criar conta. Tente novamente.' }
-}
-
 export function SignUpForm() {
   const navigate = useNavigate()
+  const { signUp } = useAuth()
   const [searchParams] = useSearchParams()
   const [showPassword, setShowPassword] = useState(false)
-  const { mutateAsync: registerUser, isPending } = useRegister()
 
-  const redirectParam = searchParams.get('redirect')
   const emailParam = searchParams.get('email')
 
   const form = useForm<RegisterFormData>({
@@ -42,26 +24,17 @@ export function SignUpForm() {
     defaultValues: { name: '', email: emailParam ?? '', password: '', termsAccepted: false as unknown as true },
   })
 
-  const { control, handleSubmit, setError, formState: { isSubmitting } } = form
+  const { control, handleSubmit, formState: { isSubmitting } } = form
   const password = useWatch({ control, name: 'password' })
-  const isLoading = isPending || isSubmitting
   const hasMinLength = password.length >= 8
+  const isLoading = isSubmitting
 
   const onSubmit = handleSubmit(async (data: RegisterFormData) => {
     try {
-      await registerUser(data)
-      toast.success('Cadastro realizado! Verifique seu e-mail e faça login para continuar.')
-      await new Promise((r) => setTimeout(r, 1500))
-      const loginParams = new URLSearchParams({ email: data.email })
-      if (redirectParam?.startsWith('/')) loginParams.set('redirect', redirectParam)
-      navigate(`/login?${loginParams.toString()}`)
-    } catch (err) {
-      const { field, message } = parseApiError(err)
-      if (field) {
-        setError(field, { message })
-      } else {
-        toast.error(message)
-      }
+      await signUp(data)
+      navigate('/onboarding')
+    } catch {
+      return
     }
   })
 
@@ -134,8 +107,8 @@ export function SignUpForm() {
           )}
         </div>
 
-        <div className="pt-1">
-          <div className="flex items-center gap-2.5">
+        <div className="flex items-center">
+          <div className="flex gap-2.5 items-center">
             <Controller
               control={control}
               name="termsAccepted"
@@ -171,10 +144,7 @@ export function SignUpForm() {
           disabled={isLoading}
           className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-brand-deep text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:opacity-60"
         >
-          {isLoading
-            ? <div className="flex items-center gap-2"><Loading /><span>Criando...</span></div>
-            : 'Criar conta'
-          }
+          Criar conta
         </button>
       </form>
 
