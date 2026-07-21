@@ -5,7 +5,6 @@ import { PersonalInfoCard } from "./components/personal-info-card";
 import { SecurityCard } from "./components/security-card";
 import { useAuth } from "@/hooks/use-auth";
 import { User, Building2, Monitor, MapPin } from "lucide-react";
-import { UserRole } from "@/api/users/types";
 import { PlanLimitBanner } from "@/components/plan-limit-banner";
 import { useCabinetFeatures } from "@/hooks/use-cabinet-features";
 import { useCabinetUsage } from "@/api/cabinets/hooks";
@@ -41,10 +40,7 @@ export function Settings() {
         <header className="mb-8">
           <h1 className="text-lg font-semibold tracking-tight">Configurações</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {user?.role === UserRole.CITIZEN ?
-              'Gerencie suas informações pessoais.'
-              : 'Gerencie suas informações pessoais e configurações do gabinete.'
-            }
+            Gerencie suas informações pessoais e configurações da empresa.
           </p>
         </header>
 

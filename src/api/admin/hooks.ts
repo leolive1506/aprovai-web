@@ -61,43 +61,6 @@ export function useAdminUpdateUser() {
   })
 }
 
-export function useAdminListReportedDemands(params: { page: number; limit: number }) {
-  return useQuery({
-    queryKey: ["admin-reported-demands", params],
-    queryFn: () => AdminApi.listReportedDemands(params),
-    placeholderData: (prev) => prev,
-  })
-}
-
-export function useAdminListReportReasons(demandId: string | null, params: { page: number; limit: number }) {
-  return useQuery({
-    queryKey: ["admin-report-reasons", demandId, params],
-    queryFn: () => AdminApi.listReportReasons(demandId!, params),
-    enabled: !!demandId,
-  })
-}
-
-export function useAdminDismissDemandReports() {
-  return useMutation({
-    mutationFn: (demandId: string) => AdminApi.dismissDemandReports(demandId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-reported-demands"] })
-      queryClient.invalidateQueries({ queryKey: ["admin-report-reasons"] })
-      toast.success("Denúncias ignoradas. Novos reportes estão bloqueados.")
-    },
-  })
-}
-
-export function useAdminDeleteDemand() {
-  return useMutation({
-    mutationFn: (demandId: string) => AdminApi.adminDeleteDemand(demandId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-reported-demands"] })
-      toast.success("Demanda excluída com sucesso.")
-    },
-  })
-}
-
 export function useAdminDisableUser() {
   return useMutation({
     mutationFn: (userId: string) => AdminApi.disableUser(userId),
