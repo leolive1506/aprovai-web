@@ -1,13 +1,11 @@
 export const UserRole = {
   ADMIN: "ADMIN",
-  MEMBER: "MEMBER",
-  CITIZEN: "CITIZEN",
+  COMPANY: "COMPANY",
 } as const;
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
 export const UserRoleLabel: Record<UserRole, string> = {
   [UserRole.ADMIN]: "Administrador",
-  [UserRole.MEMBER]: "Membro",
-  [UserRole.CITIZEN]: "Cidadão",
+  [UserRole.COMPANY]: "Empresa",
 }

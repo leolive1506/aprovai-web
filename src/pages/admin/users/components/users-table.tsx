@@ -14,8 +14,7 @@ const filterFields: DataTableFilterField[] = [
     type: "select",
     options: [
       { label: "Admin", value: UserRole.ADMIN },
-      { label: "Membro", value: UserRole.MEMBER },
-      { label: "Cidadão", value: UserRole.CITIZEN },
+      { label: "Empresa", value: UserRole.COMPANY },
     ],
   },
   {

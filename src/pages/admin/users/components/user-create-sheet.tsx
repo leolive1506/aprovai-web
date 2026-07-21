@@ -33,7 +33,7 @@ export function UserCreateSheet() {
       name: "",
       email: "",
       password: "",
-      role: UserRole.CITIZEN,
+      role: UserRole.COMPANY,
       avatar: [],
     },
   })
@@ -151,8 +151,7 @@ export function UserCreateSheet() {
                 disabled={isFormSubmitting}
                 placeholder="Selecione a role"
                 options={[
-                  { label: "Cidadão", value: UserRole.CITIZEN },
-                  { label: "Membro", value: UserRole.MEMBER },
+                  { label: "Empresa", value: UserRole.COMPANY },
                   { label: "Admin", value: UserRole.ADMIN },
                 ]}
               />

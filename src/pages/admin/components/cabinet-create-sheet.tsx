@@ -62,7 +62,7 @@ export function CabinetsForm({ sizeTrigger }: CabinetsFormProps) {
 
   const fetchUserOptions = useCallback(async ({ page }: { page: number }) => {
     const limit = 20
-    const result = await UsersApi.list({ page, limit, role: UserRole.MEMBER })
+    const result = await UsersApi.list({ page, limit, role: UserRole.COMPANY })
     const options = result.items.map((user) => ({
       value: user.id,
       label: `${user.name} (${user.email})`,

@@ -8,7 +8,7 @@ import { SubscriptionStatusBanner } from "../subscription-status-banner";
 
 import { UserRole } from "@/api/users/types";
 
-const rolesWithSidebar: UserRole[] = [UserRole.ADMIN, UserRole.MEMBER]
+const rolesWithSidebar: UserRole[] = [UserRole.ADMIN, UserRole.COMPANY]
 
 export function Layout() {
   const { user, isInitializing, hasRoleAdmin } = useAuth();

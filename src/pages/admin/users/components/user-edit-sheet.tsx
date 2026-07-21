@@ -36,7 +36,7 @@ export function UserEditSheet({ userId }: { userId: string }) {
       name: "",
       email: "",
       password: "",
-      role: UserRole.CITIZEN,
+      role: UserRole.COMPANY,
       avatar: [],
     },
   })
@@ -56,7 +56,7 @@ export function UserEditSheet({ userId }: { userId: string }) {
           name: data.name ?? "",
           email: data.email ?? "",
           password: "",
-          role: (data.role as AdminUserUpdateFormData["role"]) ?? UserRole.CITIZEN,
+          role: (data.role as AdminUserUpdateFormData["role"]) ?? UserRole.COMPANY,
           avatar: [],
         })
         setCurrentAvatarUrl(data.avatarUrl ?? null)
@@ -187,8 +187,7 @@ export function UserEditSheet({ userId }: { userId: string }) {
                 disabled={isFormSubmitting}
                 placeholder="Selecione a role"
                 options={[
-                  { label: "Cidadão", value: UserRole.CITIZEN },
-                  { label: "Membro", value: UserRole.MEMBER },
+                  { label: "Empresa", value: UserRole.COMPANY },
                   { label: "Admin", value: UserRole.ADMIN },
                 ]}
               />
