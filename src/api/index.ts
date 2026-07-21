@@ -11,7 +11,7 @@ export class ApiError extends Error {
   }
 }
 
-const STORAGE_KEYS = {
+export const STORAGE_KEYS = {
 	USER: "@aprovai:user",
 	ACCESS_TOKEN: "@aprovai:access_token",
 } as const;
