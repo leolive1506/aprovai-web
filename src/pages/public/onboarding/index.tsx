@@ -98,6 +98,7 @@ export function Onboarding() {
 
 	async function handleCompanyNext() {
 		try {
+			hasResumedRef.current = true
 			if (!companyId) {
 				const company = await createCompany({
 					name: data.companyName,
