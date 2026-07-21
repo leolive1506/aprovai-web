@@ -25,9 +25,13 @@ export function SignUpForm() {
   })
 
   const { control, handleSubmit, formState: { isSubmitting } } = form
-  const password = useWatch({ control, name: 'password' })
+  const [name, email, password, termsAccepted] = useWatch({
+    control,
+    name: ['name', 'email', 'password', 'termsAccepted'],
+  })
   const hasMinLength = password.length >= 8
   const isLoading = isSubmitting
+  const isFormFilled = Boolean(name && email && hasMinLength && termsAccepted)
 
   const onSubmit = handleSubmit(async (data: RegisterFormData) => {
     try {
@@ -141,8 +145,8 @@ export function SignUpForm() {
 
         <button
           type="submit"
-          disabled={isLoading}
-          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-brand-deep text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:opacity-60"
+          disabled={isLoading || !isFormFilled}
+          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-brand-deep text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
         >
           Criar conta
         </button>

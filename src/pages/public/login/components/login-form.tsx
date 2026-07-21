@@ -26,6 +26,8 @@ export function LoginForm() {
 	})
 
 	const email = watch('email')
+	const password = watch('password')
+	const isFormFilled = Boolean(email && password)
 
 	const onSubmit = handleSubmit(async (data: LoginFormData) => {
 		await login(data)
@@ -85,8 +87,8 @@ export function LoginForm() {
 
 					<button
 						type="submit"
-						disabled={isSubmitting}
-						className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-brand-deep text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:opacity-60"
+						disabled={isSubmitting || !isFormFilled}
+						className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-linear-to-b from-primary to-brand-deep text-sm font-semibold text-white shadow-xs transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
 					>
 						{isSubmitting && <Loader2 className="size-4 animate-spin" />}
 						{isSubmitting ? 'Entrando...' : 'Entrar'}
