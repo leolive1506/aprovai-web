@@ -19,7 +19,8 @@ export interface LoginResponse {
 }
 
 export interface RegisterResponse {
-	message: string;
+	expiresIn: number;
+	accessToken: string;
 }
 
 export interface RegisterCabinetRequest {

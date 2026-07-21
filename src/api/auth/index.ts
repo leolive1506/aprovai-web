@@ -4,14 +4,16 @@ import type {
 	GetUserProfileResponse,
 	LoginRequest,
 	LoginResponse,
-	RegisterRequest
+	RegisterRequest,
+	RegisterResponse
 } from "./types";
 
 const baseURL = "/auth"
 
 export const AuthApi = {
-	register: async (data: RegisterRequest): Promise<void> => {
-		await apiClient.post(`${baseURL}/register`, data);
+	register: async (data: RegisterRequest): Promise<RegisterResponse> => {
+		const response = await apiClient.post(`${baseURL}/register`, data);
+		return response.data;
 	},
 	forgotPassword: async (email: string): Promise<void> => {
 		await apiClient.post(`${baseURL}/forgot-password`, { email });

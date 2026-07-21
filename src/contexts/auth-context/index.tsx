@@ -1,4 +1,4 @@
-import { apiClient, ApiError } from "@/api";
+import { apiClient, ApiError, STORAGE_KEYS } from "@/api";
 import { AuthApi } from "@/api/auth";
 import type { GetUserProfileResponse, LoginRequest, RegisterRequest } from "@/api/auth/types";
 import { CabinetsApi } from "@/api/cabinets";
@@ -10,8 +10,8 @@ import { AuthContext } from "./context";
 import type { Cabinet } from "@/api/cabinets/types";
 import { UserRole } from "@/api/users/types";
 
-const USER_KEY = "@gabinete:user";
-const ACCESS_TOKEN_KEY = "@gabinete:access_token";
+const USER_KEY = STORAGE_KEYS.USER;
+const ACCESS_TOKEN_KEY = STORAGE_KEYS.ACCESS_TOKEN;
 const CABINET_KEY = "@gabinete:cabinet";
 
 interface AuthProviderProps {
@@ -144,10 +144,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const signUp = async (data: RegisterRequest) => {
     setIsLoading(true);
     try {
-      await AuthApi.register(data);
-      navigate("/");
+      const response = await AuthApi.register(data);
+      localStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
+      await syncProfile();
     } catch (error) {
-      toast.error("Erro ao realizar cadastro. Verifique suas credenciais.");
+      const apiError = error as { response?: { status?: number; data?: { message?: string | string[] } } };
+      const status = apiError.response?.status;
+
+      if (status === 409) {
+        toast.error("Este e-mail já está cadastrado.");
+      } else {
+        toast.error("Erro ao realizar cadastro. Verifique os dados informados.");
+      }
       throw error;
     } finally {
       setIsLoading(false);

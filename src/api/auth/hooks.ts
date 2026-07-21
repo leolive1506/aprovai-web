@@ -31,7 +31,7 @@ export function useRegister() {
 	return useMutation({
 		mutationFn: (data: RegisterRequest) => AuthApi.register(data),
 		onSuccess: () => {
-			toast.success("Registro realizado com sucesso! Verifique seu e-amil para validação de e-mail.");
+			toast.success("Conta criada! Vamos configurar sua empresa.");
 		}
 	})
 }
