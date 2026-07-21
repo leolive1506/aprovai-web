@@ -1,4 +1,5 @@
-import { useInviteMember } from "@/api/cabinets/hooks"
+import { useInviteTeamMembers } from "@/api/companies/hooks"
+import { InviteRole } from "@/api/companies/types"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,39 +11,33 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/hooks/use-auth"
-import { cn, getApiErrorMessage } from "@/lib/utils"
-import { Crown, Shield } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Shield, UserCheck } from "lucide-react"
 import { useState } from "react"
-import { toast } from "sonner"
 
 interface InviteMemberDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  companyId: string | undefined
 }
 
-export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogProps) {
-  const { cabinet } = useAuth()
+export function InviteMemberDialog({ open, onOpenChange, companyId }: InviteMemberDialogProps) {
   const [email, setEmail] = useState("")
-  const [role, setRole] = useState<"OWNER" | "STAFF">("STAFF")
+  const [role, setRole] = useState<InviteRole>(InviteRole.COLLABORATOR)
 
-  const { mutate, isPending } = useInviteMember(cabinet?.slug)
+  const { mutate, isPending } = useInviteTeamMembers(companyId)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email.trim()) return
 
     mutate(
-      { email: email.trim(), role },
+      { invites: [{ email: email.trim(), role }] },
       {
-        onSuccess: (data) => {
-          toast.success(data?.message || "Convite enviado com sucesso.")
+        onSuccess: () => {
           setEmail("")
-          setRole("STAFF")
+          setRole(InviteRole.COLLABORATOR)
           onOpenChange(false)
-        },
-        onError: (err: unknown) => {
-          toast.error(getApiErrorMessage(err, "Erro ao enviar convite. Tente novamente."))
         },
       },
     )
@@ -54,7 +49,7 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
         <DialogHeader>
           <DialogTitle>Convidar membro</DialogTitle>
           <DialogDescription>
-            Envie um convite por e-mail para adicionar alguém ao gabinete.
+            Envie um convite por e-mail para adicionar alguém à empresa.
           </DialogDescription>
         </DialogHeader>
 
@@ -77,10 +72,10 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
-                onClick={() => setRole("STAFF")}
+                onClick={() => setRole(InviteRole.COLLABORATOR)}
                 className={cn(
                   "flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-colors",
-                  role === "STAFF"
+                  role === InviteRole.COLLABORATOR
                     ? "border-primary bg-primary/5 text-primary"
                     : "border-border bg-background text-foreground hover:bg-muted",
                 )}
@@ -88,13 +83,13 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                 <div
                   className={cn(
                     "flex size-7 shrink-0 items-center justify-center rounded-md",
-                    role === "STAFF" ? "bg-primary/10" : "bg-muted",
+                    role === InviteRole.COLLABORATOR ? "bg-primary/10" : "bg-muted",
                   )}
                 >
                   <Shield className="size-3.5" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold leading-tight">Membro</p>
+                  <p className="text-xs font-semibold leading-tight">Colaborador</p>
                   <p className="text-2xs text-muted-foreground leading-tight mt-0.5">
                     Acesso operacional
                   </p>
@@ -103,10 +98,10 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
 
               <button
                 type="button"
-                onClick={() => setRole("OWNER")}
+                onClick={() => setRole(InviteRole.APPROVER)}
                 className={cn(
                   "flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-colors",
-                  role === "OWNER"
+                  role === InviteRole.APPROVER
                     ? "border-amber-500/50 bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400"
                     : "border-border bg-background text-foreground hover:bg-muted",
                 )}
@@ -114,17 +109,17 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                 <div
                   className={cn(
                     "flex size-7 shrink-0 items-center justify-center rounded-md",
-                    role === "OWNER"
+                    role === InviteRole.APPROVER
                       ? "bg-amber-100 dark:bg-amber-900/40"
                       : "bg-muted",
                   )}
                 >
-                  <Crown className="size-3.5" />
+                  <UserCheck className="size-3.5" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold leading-tight">Responsável</p>
+                  <p className="text-xs font-semibold leading-tight">Aprovador</p>
                   <p className="text-2xs text-muted-foreground leading-tight mt-0.5">
-                    Acesso total
+                    Aprova pedidos
                   </p>
                 </div>
               </button>
