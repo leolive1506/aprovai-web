@@ -1,7 +1,9 @@
+import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
-import * as React from "react"
 
+import { useIsMobile } from "@/hooks/use-mobile"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
@@ -18,8 +20,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { cn } from "@/lib/utils"
 import { PanelLeftIcon } from "lucide-react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
@@ -66,6 +66,8 @@ function SidebarProvider({
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
+  // This is the internal state of the sidebar.
+  // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
@@ -77,15 +79,18 @@ function SidebarProvider({
         _setOpen(openState)
       }
 
+      // This sets the cookie to keep the sidebar state.
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open]
   )
 
+  // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen, setOpenMobile])
 
+  // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
@@ -101,6 +106,8 @@ function SidebarProvider({
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
 
+  // We add a state so that we can do data-state="expanded" or "collapsed".
+  // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed"
 
   const contextValue = React.useMemo<SidebarContextProps>(
@@ -204,6 +211,7 @@ function Sidebar({
       data-side={side}
       data-slot="sidebar"
     >
+      {/* This is what handles the sidebar gap on desktop */}
       <div
         data-slot="sidebar-gap"
         className={cn(
@@ -220,6 +228,7 @@ function Sidebar({
         data-side={side}
         className={cn(
           "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] md:flex",
+          // Adjust the padding for floating and inset variants.
           variant === "floating" || variant === "inset"
             ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
@@ -455,13 +464,13 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate",
+  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate",
   {
     variants: {
       variant: {
         default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
         outline:
-          "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
+          "bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]",
       },
       size: {
         default: "h-8 text-sm",
@@ -544,7 +553,7 @@ function SidebarMenuAction({
       className={cn(
         "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform group-data-[collapsible=icon]:hidden peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-4 [&>svg]:shrink-0",
         showOnHover &&
-        "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-sidebar-accent-foreground aria-expanded:opacity-100 md:opacity-0",
+          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-active/menu-button:text-sidebar-accent-foreground aria-expanded:opacity-100 md:opacity-0",
         className
       )}
       {...props}
@@ -576,6 +585,7 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
 }) {
+  // Random width between 50 to 90%.
   const [width] = React.useState(() => {
     return `${Math.floor(Math.random() * 40) + 50}%`
   })
@@ -654,7 +664,7 @@ function SidebarMenuSubButton({
       data-size={size}
       data-active={isActive}
       className={cn(
-        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
+        "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-sm data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
         className
       )}
       {...props}
@@ -686,6 +696,5 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  useSidebar
+  useSidebar,
 }
-

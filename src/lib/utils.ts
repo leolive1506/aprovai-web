@@ -19,3 +19,11 @@ export function formatBytes(bytes: number): string {
   if (bytes >= 1024) return `${(bytes / 1024).toFixed(0)} KB`
   return `${bytes} B`
 }
+
+export function formatCurrencyBRL(value: number): string {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    maximumFractionDigits: 0,
+  }).format(value)
+}

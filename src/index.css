@@ -103,7 +103,7 @@
 @theme inline {
   --font-heading: var(--font-sans);
   --font-brand: 'Montserrat', sans-serif;
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-sans: 'Inter Variable', sans-serif;
   --color-brand: #7409f4;
   --color-brand-deep: oklch(0.5 0.235 292);
   --color-success: #08da81;
@@ -173,7 +173,7 @@
   --chart-4: oklch(0.488 0.243 264.376);
   --chart-5: oklch(0.424 0.199 265.638);
   --radius: 0.3rem;
-  --sidebar: oklch(1 0 0);
+  --sidebar: oklch(0.977 0.001 286.375);
   --sidebar-foreground: oklch(0.141 0.005 285.823);
   --sidebar-primary: oklch(0.21 0.006 285.885);
   --sidebar-primary-foreground: oklch(0.985 0 0);
