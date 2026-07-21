@@ -2,7 +2,7 @@ import Logo from '@/assets/aprovai.svg'
 import { useCompleteOnboarding, useCreateCompany, useInviteTeamMembers, useMyCompany, useSetApprovalRule, useUpdateNotificationPreferences, useUpdateOnboardingStep } from '@/api/companies/hooks'
 import { ApproverType, InviteRole, OnboardingStep as BackendOnboardingStep } from '@/api/companies/types'
 import { cn } from '@/lib/utils'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { AccountStep } from './components/account-step'
@@ -64,9 +64,11 @@ export function Onboarding() {
 	const { mutateAsync: completeOnboarding } = useCompleteOnboarding()
 
 	const isSubmittingTeamStep = isInvitingTeam || isSavingRule || isUpdatingStep
+	const hasResumedRef = useRef(false)
 
 	useEffect(() => {
-		if (!myCompany) return
+		if (!myCompany || hasResumedRef.current) return
+		hasResumedRef.current = true
 		if (myCompany.onboardingStep === BackendOnboardingStep.DONE) {
 			navigate('/home', { replace: true })
 			return

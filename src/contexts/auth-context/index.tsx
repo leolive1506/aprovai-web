@@ -1,7 +1,6 @@
 import { apiClient, ApiError, STORAGE_KEYS } from "@/api";
 import { AuthApi } from "@/api/auth";
 import type { GetUserProfileResponse, LoginRequest, RegisterRequest } from "@/api/auth/types";
-import { CabinetsApi } from "@/api/cabinets";
 import { queryClient } from "@/api/queryClient";
 import { useState, useEffect, useRef, type ReactNode, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -51,19 +50,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const profile = await AuthApi.getUserProfile();
       setUser(profile);
       localStorage.setItem(USER_KEY, JSON.stringify(profile));
-
-      try {
-        const userCabinet = await CabinetsApi.me();
-        setCabinet(userCabinet);
-        if (userCabinet) {
-          localStorage.setItem(CABINET_KEY, JSON.stringify(userCabinet));
-        } else {
-          localStorage.removeItem(CABINET_KEY);
-        }
-      } catch {
-        setCabinet(null);
-        localStorage.removeItem(CABINET_KEY);
-      }
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
         setUser(null);
